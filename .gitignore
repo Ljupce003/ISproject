@@ -1,0 +1,99 @@
+## Onion Architecture .NET Solution .gitignore
+## Based on GitHub .NET + Visual Studio defaults, adjusted for multi-project setup
+
+############################
+# Build results
+############################
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+[Ww][Ii][Nn]32/
+bld/
+
+############################
+# .NET Core / ASP.NET
+############################
+project.lock.json
+project.fragment.lock.json
+artifacts/
+ScaffoldingReadMe.txt
+
+# User secrets (ASP.NET Core)
+secrets.json
+
+############################
+# NuGet
+############################
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+!packages/build/
+
+############################
+# Logs / Coverage / Reports
+############################
+*.log
+logs/
+*.coverage
+*.coveragexml
+TestResult.xml
+nunit-*.xml
+*.VisualState.xml
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# MSBuild binary logs
+*.binlog
+
+############################
+# IDE-specific
+############################
+.vs/
+.vscode/
+.idea/
+
+# Visual Studio user files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider / JetBrains
+*.iml
+*.ipr
+*.iws
+
+############################
+# Temporary / backup
+############################
+~$*
+*~
+*.tmp
+*.bak
+*.swp
+*.swo
+
+############################
+# Environment & secrets
+############################
+.env
+.env.*          # .env.development, .env.production, etc.
+*.secrets.json
+
+############################
+# OS generated
+############################
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini

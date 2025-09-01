@@ -1,0 +1,42 @@
+﻿@model ISproject.Domain.Models.ArticleInFolder
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>ArticleInFolder</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NewsArticleId" class="control-label">NewsArticle</label>
+                <select asp-for="NewsArticleId" class ="form-control" asp-items="ViewBag.NewsArticleId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BookmarkFolderId" class="control-label">BookmarkFolder</label>
+                <select asp-for="BookmarkFolderId" class ="form-control" asp-items="ViewBag.BookmarkFolderId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateAdded" class="control-label"></label>
+                <input asp-for="DateAdded" class="form-control" />
+                <span asp-validation-for="DateAdded" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-1">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="mt-1">
+    <a asp-action="Index" asp-controller="BookmarkFolders" class="btn btn-info">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,113 @@
+﻿@model IEnumerable<ISproject.Domain.Models.NewsSource>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index - News Sources</h1>
+
+<p>
+    <a asp-action="Create" class="btn-success btn">Create New</a>
+</p>
+
+@* <div class="d-flex align-items-center">
+	<button type="button" class="btn btn-primary m-3 ms-0" id="fetchBtn">Fetch Sources</button>
+
+    <div id="sourceForm" class="hidden-form m-3">
+        <form method="get" class="d-flex align-items-center" asp-controller="News" asp-action="FetchSources">
+			<input type="text" name="sourceName" class="me-2" placeholder="Enter keyword..." />
+			<button type="submit" class="btn-sm btn btn-success">Fetch</button>
+		</form>
+	</div>
+</div> *@
+
+<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#sourceForm">
+    Fetch Sources
+</button>
+
+<div class="collapse mt-3" id="sourceForm">
+    <div class="card card-body">
+        <form method="get" asp-controller="Api" asp-action="GetNewsSources">
+            <input type="text" name="sourceKeyword" class="form-control mb-2" placeholder="Enter keyword..." />
+            <button type="submit" class="btn btn-success">Fetch</button>
+        </form>
+    </div>
+</div>
+
+
+
+<table class="table mt-1 table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Url)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Country)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Language)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <a href="@item.Url">Link</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Language.Name)
+            </td>
+            <td>
+                 <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                 <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                 <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+@* <style>
+    .hidden-form {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition: all 0.4s ease; /* smooth transition */
+    }
+    .hidden-form.show {
+        max-height: 200px; /* big enough to fit form */
+        opacity: 1;
+    }
+</style>
+
+<script>
+    document.getElementById("fetchBtn").addEventListener("click", function () {
+        document.getElementById("sourceForm").classList.toggle("show");
+    });
+</script> *@
