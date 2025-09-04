@@ -47,7 +47,7 @@ namespace ISproject.web.Controllers
 
             return View(country);
         }
-
+        [Authorize]
         // GET: Countries/Create
         public IActionResult Create()
         {
@@ -59,6 +59,7 @@ namespace ISproject.web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Create([Bind("Name,Code,Id")] Country country)
         {
             if (ModelState.IsValid)
@@ -70,6 +71,7 @@ namespace ISproject.web.Controllers
         }
 
         // GET: Countries/Edit/5
+        [Authorize]
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -89,6 +91,7 @@ namespace ISproject.web.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Guid id, [Bind("Name,Code,Id")] Country country)
         {
@@ -106,6 +109,7 @@ namespace ISproject.web.Controllers
         }
 
         // GET: Countries/Delete/5
+        [Authorize]
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -125,6 +129,7 @@ namespace ISproject.web.Controllers
         // POST: Countries/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult DeleteConfirmed(Guid id)
         {
             countryService.Delete(id);

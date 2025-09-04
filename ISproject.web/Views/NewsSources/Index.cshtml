@@ -8,7 +8,10 @@
 <h1>Index - News Sources</h1>
 
 <p>
-    <a asp-action="Create" class="btn-success btn">Create New</a>
+	@if (User.Identity?.IsAuthenticated ?? false)
+	{
+		<a asp-action="Create" class="btn-success btn">Create New</a>
+	}
 </p>
 
 @* <div class="d-flex align-items-center">
@@ -22,19 +25,21 @@
 	</div>
 </div> *@
 
-<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#sourceForm">
-    Fetch Sources
-</button>
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#sourceForm">
+        Fetch Sources
+    </button>
 
-<div class="collapse mt-3" id="sourceForm">
-    <div class="card card-body">
-        <form method="get" asp-controller="Api" asp-action="GetNewsSources">
-            <input type="text" name="sourceKeyword" class="form-control mb-2" placeholder="Enter keyword..." />
-            <button type="submit" class="btn btn-success">Fetch</button>
-        </form>
+    <div class="collapse mt-3" id="sourceForm">
+        <div class="card card-body">
+            <form method="get" asp-controller="Api" asp-action="GetNewsSources">
+                <input type="text" name="sourceKeyword" class="form-control mb-2" placeholder="Enter keyword..." />
+                <button type="submit" class="btn btn-success">Fetch</button>
+            </form>
+        </div>
     </div>
-</div>
-
+}
 
 
 <table class="table mt-1 table-striped">
@@ -83,9 +88,12 @@
                 @Html.DisplayFor(modelItem => item.Language.Name)
             </td>
             <td>
-                 <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                 <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                 <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+				@if (User.Identity?.IsAuthenticated ?? false)
+				{
+					<a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+					<a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id">Details</a>
+					<a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+				}
             </td>
         </tr>
 }

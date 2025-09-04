@@ -51,6 +51,7 @@ namespace ISproject.web.Controllers
         }
 
         // GET: Languages/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -61,6 +62,7 @@ namespace ISproject.web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Create([Bind("Name,Code,Id")] Language language)
         {
             if (ModelState.IsValid)
@@ -72,6 +74,7 @@ namespace ISproject.web.Controllers
         }
 
         // GET: Languages/Edit/5
+        [Authorize]
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -92,6 +95,7 @@ namespace ISproject.web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Edit(Guid id, [Bind("Name,Code,Id")] Language language)
         {
             if (id != language.Id)
@@ -108,6 +112,7 @@ namespace ISproject.web.Controllers
         }
 
         // GET: Languages/Delete/5
+        [Authorize]
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -127,6 +132,7 @@ namespace ISproject.web.Controllers
         // POST: Languages/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult DeleteConfirmed(Guid id)
         {
             languageService.Delete(id);

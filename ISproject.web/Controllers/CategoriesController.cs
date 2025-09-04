@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using ISproject.Domain.Models;
 using ISproject.Repository.Data;
 using ISproject.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace ISproject.web.Controllers
 {
@@ -50,6 +51,7 @@ namespace ISproject.web.Controllers
         }
 
         // GET: Categories/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -60,6 +62,7 @@ namespace ISproject.web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Create([Bind("Code,Description,Id")] Category category)
         {
             if (ModelState.IsValid)
@@ -71,6 +74,7 @@ namespace ISproject.web.Controllers
         }
 
         // GET: Categories/Edit/5
+        [Authorize]
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -91,6 +95,7 @@ namespace ISproject.web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Edit(Guid id, [Bind("Code,Description,Id")] Category category)
         {
             if (id != category.Id)
@@ -107,6 +112,7 @@ namespace ISproject.web.Controllers
         }
 
         // GET: Categories/Delete/5
+        [Authorize]
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -126,6 +132,7 @@ namespace ISproject.web.Controllers
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult DeleteConfirmed(Guid id)
         {
             categoryService.Delete(id);
