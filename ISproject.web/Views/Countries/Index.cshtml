@@ -8,7 +8,10 @@
 <h1>Index - Countries</h1>
 
 <p>
-    <a class="btn btn-success" asp-action="Create">Create New</a>
+	@if (User.Identity?.IsAuthenticated ?? false)
+	{
+		<a class="btn btn-success" asp-action="Create">Create New</a>
+	}
 </p>
 <table class="table table-striped">
     <thead>
@@ -32,9 +35,12 @@
                 @Html.DisplayFor(modelItem => item.Code)
             </td>
                 <td>
-                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
-                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id">Details</a> 
-                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+					@if (User.Identity?.IsAuthenticated ?? false)
+					{
+						<a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+						<a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id">Details</a>
+						<a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+					}
                 </td>
         </tr>
 }

@@ -64,6 +64,7 @@ namespace ISproject.web.Controllers
         }
 
         // GET: NewsArticles/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(categoryService.GetAll(), "Id", "Code");
@@ -78,6 +79,7 @@ namespace ISproject.web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Create([Bind("Author,Title,Description,Url,Source,ImageUrl,CategoryId,LanguageId,CountryId,PublishedAt,Id")] NewsArticle newsArticle)
         {
             if (ModelState.IsValid)
@@ -93,6 +95,7 @@ namespace ISproject.web.Controllers
         }
 
         // GET: NewsArticles/Edit/5
+        [Authorize]
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -117,6 +120,7 @@ namespace ISproject.web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Edit(Guid id, [Bind("Author,Title,Description,Url,Source,ImageUrl,CategoryId,LanguageId,CountryId,PublishedAt,Id")] NewsArticle newsArticle)
         {
             if (id != newsArticle.Id)
@@ -137,6 +141,7 @@ namespace ISproject.web.Controllers
         }
 
         // GET: NewsArticles/Delete/5
+        [Authorize]
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -156,6 +161,7 @@ namespace ISproject.web.Controllers
         // POST: NewsArticles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult DeleteConfirmed(Guid id)
         {
             newsArticleService.Delete(id);
@@ -166,6 +172,7 @@ namespace ISproject.web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult BookMarkArticles(List<string> articleId)
         {
 

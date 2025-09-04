@@ -55,6 +55,7 @@ namespace ISproject.web.Controllers
         }
 
         // GET: ArticleInFolders/Create
+        [Authorize]
         public IActionResult Create()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -68,6 +69,7 @@ namespace ISproject.web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Create([Bind("NewsArticleId,BookmarkFolderId,DateAdded,Id")] ArticleInFolder articleInFolder)
         {
             if (ModelState.IsValid)
@@ -83,6 +85,7 @@ namespace ISproject.web.Controllers
         }
 
         // GET: ArticleInFolders/Edit/5
+        [Authorize]
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -106,6 +109,7 @@ namespace ISproject.web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Edit(Guid id, [Bind("NewsArticleId,BookmarkFolderId,DateAdded,Id")] ArticleInFolder articleInFolder)
         {
             if (id != articleInFolder.Id)
@@ -126,6 +130,7 @@ namespace ISproject.web.Controllers
         }
 
         // GET: ArticleInFolders/Delete/5
+        [Authorize]
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -145,6 +150,7 @@ namespace ISproject.web.Controllers
         // POST: ArticleInFolders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult DeleteConfirmed(Guid id)
         {
             articleInFolderService.Delete(id);

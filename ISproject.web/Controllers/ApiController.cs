@@ -1,5 +1,6 @@
 ﻿using ISproject.Domain.Models;
 using ISproject.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -24,6 +25,7 @@ namespace ISproject.web.Controllers
 
         // GET: Api/GetNewsArticles
         [HttpGet("GetNewsArticles")]
+        [Authorize]
         public async Task<IActionResult> GetNewsArticles(string category, string country, string language, string sort)
         {
             var articles = await apiService.GetNewsArticles(country, category, language, null, sort, DateTime.Now, 100);
@@ -37,6 +39,7 @@ namespace ISproject.web.Controllers
 
         // GET: Api/GetNewsSources
         [HttpGet("GetNewsSources")]
+        [Authorize]
         public async Task<IActionResult> GetNewsSources(string sourceKeyword)
         {
             var sources = await apiService.GetNewsSources(sourceKeyword, null, null, null,100, 0);
