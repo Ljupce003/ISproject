@@ -1,14 +1,15 @@
+using Azure.Identity;
 using ISproject.Domain.Models;
 using ISproject.Repository.Data;
-using ISproject.Service.Interface;
-using ISproject.Service.Implementation;
-using ISproject.Repository.Interface;
 using ISproject.Repository.Implementation;
+using ISproject.Repository.Interface;
+using ISproject.Service.Implementation;
+using ISproject.Service.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
-using Azure.Identity;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +53,18 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    //options.UseSqlServer(connectionString)
+    
+    options.UseSqlServer(connectionString, sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,                  // retry 5 times
+            maxRetryDelay: TimeSpan.FromSeconds(15),  // wait up to 15s between retries
+            errorNumbersToAdd: null
+        );
+    })
+    
+);
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<NewsUser>(options => options.SignIn.RequireConfirmedAccount = true)
