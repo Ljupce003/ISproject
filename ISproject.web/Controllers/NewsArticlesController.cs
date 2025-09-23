@@ -40,10 +40,10 @@ namespace ISproject.web.Controllers
         // GET: NewsArticles
         public IActionResult Index()
         {
-            ViewData["CategoryId"] = new SelectList(categoryService.GetAll(), "Code", "Code");
-            ViewData["CountryId"] = new SelectList(countryService.GetAll(), "Code", "Name");
-            ViewData["LanguageId"] = new SelectList(languageService.GetAll(), "Code", "Name");
-            return View(newsArticleService.GetAll());
+            ViewData["CategoryId"] = new SelectList(categoryService.GetAll().OrderBy(cat => cat.Code), "Code", "Code");
+            ViewData["CountryId"] = new SelectList(countryService.GetAll().OrderBy(country => country.Name), "Code", "Name");
+            ViewData["LanguageId"] = new SelectList(languageService.GetAll().OrderBy(lang => lang.Name), "Code", "Name");
+            return View(newsArticleService.GetAll().OrderByDescending(na => na.PublishedAt));
         }
 
         // GET: NewsArticles/Details/5
