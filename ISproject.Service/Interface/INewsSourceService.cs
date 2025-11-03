@@ -12,5 +12,7 @@ namespace ISproject.Service.Interface
         NewsSource? GetById(Guid id);
         NewsSource? GetByCode(string code);
         IEnumerable<NewsSource> GetAll();
+
+        bool ExistsById(Guid id);
     }
 }

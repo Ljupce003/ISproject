@@ -41,6 +41,11 @@ namespace ISproject.Service.Implementation
             return _repository.Delete(newsSource);
         }
 
+        public bool ExistsById(Guid id)
+        {
+            return _repository.GetAll(selector: c => c).Any(s => s.Id == id);
+        }
+
         public IEnumerable<NewsSource> GetAll()
         {
             return _repository.GetAll(selector: c => c,
