@@ -1,40 +1,38 @@
 ﻿@model ISproject.Domain.Models.ArticleInFolder
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Remove from Folder";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Delete</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card border-0 shadow-lg rounded-4 text-center">
+                <div class="card-body p-5">
+                    <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-inline-flex p-4 mb-4">
+                        <i class="bi bi-folder-minus fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold">Remove from Folder?</h4>
+                    <p class="text-muted">
+                        Are you sure you want to remove <br>
+                        <strong class="text-dark">"@Model.NewsArticle?.Title"</strong> <br>
+                        from the folder <strong class="text-dark">"@Model.BookmarkFolder?.Name"</strong>?
+                    </p>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>ArticleInFolder</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NewsArticle)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NewsArticle.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BookmarkFolder)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BookmarkFolder.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateAdded)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateAdded)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> 
-        <a asp-action="Index" asp-controller="BookmarkFolders" class="btn btn-info">Back to List</a>
-    </form>
+                    @* <div class="alert alert-warning small py-2 mb-4">
+                        <i class="bi bi-info-circle me-1"></i> The article will remain in your bookmarks.
+                    </div> *@
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger btn-lg rounded-pill fw-bold">Yes, Delete It</button>
+                            <a asp-action="Index" asp-controller="BookmarkFolders" class="btn btn-light rounded-pill border">Keep it here</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

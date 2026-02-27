@@ -1,44 +1,81 @@
 ﻿@model ISproject.Domain.Models.BookmarkedArticle
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Update Bookmark";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header bg-warning py-4 px-4 border-0">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-white rounded-circle p-2 me-3 shadow-sm">
+                            <i class="bi bi-bookmark-star-fill text-warning fs-4"></i>
+                        </div>
+                        <h3 class="mb-0 fw-bold text-dark">Modify Bookmark</h3>
+                    </div>
+                </div>
 
-<h4>BookmarkedArticle</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ArticleId" class="control-label"></label>
-                <select asp-for="ArticleId" class="form-control" asp-items="ViewBag.ArticleId"></select>
-                <span asp-validation-for="ArticleId" class="text-danger"></span>
+                <div class="card-body p-4 p-md-5">
+                    <div class="alert alert-light border-start border-warning border-4 mb-4 rounded-3 shadow-sm">
+                        <label class="small text-muted text-uppercase fw-bold d-block mb-1">Current Article</label>
+                        <h5 class="fw-bold text-dark mb-0">@Model.Article?.Title</h5>
+                        <p class="small text-muted mb-0">by @Model.Article?.Author</p>
+                    </div>
+
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4"></div>
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <label asp-for="ArticleId" class="form-label fw-bold text-secondary">Switch Linked Article</label>
+                                <div class="input-group shadow-sm">
+                                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-newspaper"></i></span>
+                                    <select asp-for="ArticleId" class="form-select border-start-0" asp-items="ViewBag.ArticleId"></select>
+                                </div>
+                                <span asp-validation-for="ArticleId" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="BookmarkCartId" class="form-label fw-bold text-secondary">Collection ID</label>
+                                <div class="input-group shadow-sm">
+                                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-cart-check"></i></span>
+                                    <input asp-for="BookmarkCartId" class="form-control bg-light border-start-0" value="@ViewBag.BookmarkCartId" readonly />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="AddedAt" class="form-label fw-bold text-secondary">Date Saved</label>
+                                <div class="input-group shadow-sm">
+                                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-calendar-event"></i></span>
+                                    <input asp-for="AddedAt" class="form-control border-start-0" />
+                                </div>
+                                <span asp-validation-for="AddedAt" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12 mt-4 pt-4 border-top">
+                                <div class="d-flex gap-2 justify-content-between">
+                                    <a asp-action="Index" class="btn btn-outline-secondary px-4 rounded-pill">
+                                        Cancel
+                                    </a>
+                                    <button type="submit" class="btn btn-warning px-5 rounded-pill fw-bold shadow-sm">
+                                        <i class="bi bi-check-lg me-1"></i> Update Bookmark
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="BookmarkCartId" class="control-label"></label>
-                <input asp-for="BookmarkCartId" class="form-control" value="@ViewBag.BookmarkCartId" readonly />
-            </div>
-            <div class="form-group">
-                <label asp-for="AddedAt" class="control-label"></label>
-                <input asp-for="AddedAt" class="form-control" />
-                <span asp-validation-for="AddedAt" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group mt-1">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div class="mt-1">
-    <a asp-action="Index" class="btn btn-info">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

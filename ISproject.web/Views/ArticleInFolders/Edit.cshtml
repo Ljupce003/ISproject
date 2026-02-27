@@ -1,45 +1,67 @@
 ﻿@model ISproject.Domain.Models.ArticleInFolder
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Add Article to Folder";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="BookmarkFolders">Folders</a></li>
+                    <li class="breadcrumb-item active">Organize</li>
+                </ol>
+            </nav>
 
-<h4>ArticleInFolder</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NewsArticleId" class="control-label">News Article</label>
-                <select asp-for="NewsArticleId" class="form-control" asp-items="ViewBag.NewsArticleId"></select>
-                <span asp-validation-for="NewsArticleId" class="text-danger"></span>
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header bg-primary py-3 px-4">
+                    <h4 class="mb-0 text-white fw-bold"><i class="bi bi-diagram-2 me-2"></i>Link Article to Folder</h4>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="@ViewContext.RouteData.Values["action"]">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4"></div>
+                        @if (ViewContext.RouteData.Values["action"]?.ToString() == "Edit")
+                        {
+                            <input type="hidden" asp-for="Id" />
+                        }
+
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <label asp-for="NewsArticleId" class="form-label fw-bold text-secondary">News Article</label>
+                                <div class="input-group shadow-sm">
+                                    <span class="input-group-text bg-white"><i class="bi bi-file-earmark-text"></i></span>
+                                    <select asp-for="NewsArticleId" class="form-select" asp-items="ViewBag.NewsArticleId"></select>
+                                </div>
+                            </div>
+
+                            <div class="col-12 text-center my-1">
+                                <i class="bi bi-arrow-down text-primary fs-3"></i>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="BookmarkFolderId" class="form-label fw-bold text-secondary">Target Folder</label>
+                                <div class="input-group shadow-sm">
+                                    <span class="input-group-text bg-white"><i class="bi bi-folder2-open"></i></span>
+                                    <select asp-for="BookmarkFolderId" class="form-select" asp-items="ViewBag.BookmarkFolderId"></select>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="DateAdded" class="form-label fw-bold text-secondary">Categorization Date</label>
+                                <input asp-for="DateAdded" class="form-control" />
+                                <span asp-validation-for="DateAdded" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12 mt-4 pt-3 border-top d-flex gap-2">
+                                <button type="submit" class="btn btn-primary px-4 rounded-pill fw-bold">Confirm Placement</button>
+                                <a asp-action="Index" asp-controller="BookmarkFolders" class="btn btn-outline-secondary rounded-pill px-4">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="BookmarkFolderId" class="control-label">Bookmark Folder</label>
-                <select asp-for="BookmarkFolderId" class="form-control" asp-items="ViewBag.BookmarkFolderId"></select>
-                <span asp-validation-for="BookmarkFolderId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateAdded" class="control-label"></label>
-                <input asp-for="DateAdded" class="form-control" />
-                <span asp-validation-for="DateAdded" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group mt-1">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
-
-<div class="mt-1">
-    <a asp-action="Index" asp-controller="BookmarkFolders" class="btn btn-info">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

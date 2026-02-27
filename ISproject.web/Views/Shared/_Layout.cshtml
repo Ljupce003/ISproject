@@ -1,117 +1,152 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - Live News App</title>
-	<script type="importmap"></script>
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-	<link rel="stylesheet" href="~/ISproject.web.styles.css" asp-append-version="true" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Live News App</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ISproject.web.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-	<style>
-		:root {
-			--primary-color: #007bff; /* links, buttons */
-			--secondary-color: #6c757d; /* muted text */
-			--success-color: #28a745; /* optional for selected rows */
-			--hover-color: #e9ecef; /* row hover */
-			--card-bg: #ffffff; /* news cards */
-			--footer-bg: #f8f9fa; /* footer */
-			--text-color: #343a40;
-		}
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --hover-color: #f8f9fa;
+            --text-color: #343a40;
+        }
 
-		.navbar-brand {
-			font-weight: bold;
-			font-size: 1.5rem;
-			color: var(--primary-color) !important;
-		}
+        body {
+            color: var(--text-color);
+            background-color: #fcfcfc;
+        }
 
-		.navbar-nav .nav-link {
-			color: var(--text-color);
-			font-weight: 500;
-			transition: color 0.2s;
-		}
-		.navbar-nav .nav-link:hover {
-			color: var(--primary-color);
-			text-decoration: underline;
-		}
-		
-		.navbar-nav .nav-link.active {
-			color: var(--primary-color);
-			font-weight: bold;
-		}
+        .navbar {
+            padding: 0.75rem 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,.05);
+        }
 
-		footer {
-			background-color: var(--footer-bg);
-			padding: 1rem 0;
-			font-size: 0.9rem;
-			text-align: center;
-			color: var(--secondary-color);
-		}
+        .navbar-brand {
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--primary-color) !important;
+        }
 
-	</style>
+        /* Group Styling */
+        .nav-group-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--secondary-color);
+            margin-left: 1rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .navbar-nav .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+            .navbar-nav .nav-link:hover {
+                background-color: var(--hover-color);
+                color: var(--primary-color) !important;
+            }
+
+        .nav-link.active {
+            color: var(--primary-color) !important;
+            background-color: rgba(0, 123, 255, 0.08);
+        }
+
+        /* Specific coloring as per your requirement */
+        .link-config {
+            color: var(--success-color) !important;
+        }
+
+        .link-main {
+            color: var(--text-color) !important;
+        }
+
+        footer {
+            background-color: #ffffff;
+            margin-top: 3rem;
+            /* padding: 2rem 0; */
+            /* justify-content: center; */
+            color: var(--secondary-color);
+        }
+    </style>
 </head>
 <body>
-	<header>
-		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-			<div class="container-fluid">
-				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Live News App</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-						aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-						</li>
-						@* <li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-						</li> *@
-						<li class="nav-item">
-							<a class="nav-link  text-success" asp-area="" asp-controller="Countries" asp-action="Index">Countries</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link  text-success" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link  text-success" asp-area="" asp-controller="Languages" asp-action="Index">Languages</a>
-						</li>
-						<li class="nav-item me-5">
-							<a class="nav-link text-success" asp-area="" asp-controller="NewsSources" asp-action="Index"><b>News Sources</b></a>
-						</li>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-broadcast me-2"></i>Live News App
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="NewsArticles" asp-action="Index"><b>News Articles</b></a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="BookmarkedArticles" asp-action="Index"><b>Bookmarks</b></a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="BookmarkFolders" asp-action="Index"><b>Bookmark Folders</b></a>
-						</li>
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 align-items-center">
+                        <li class="nav-item">
+                            <a class="nav-link link-main" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
 
+                        <div class="vr mx-2 d-none d-lg-block text-black-50" style="height: 20px; align-self: center;"></div>
 
-					</ul>
-					<partial name="_LoginPartial" />
-				</div>
-			</div>
-		</nav>
-	</header>
-	<div class="container">
-		<main role="main" class="pb-3">
-			@RenderBody()
-		</main>
-	</div>
+                        <li class="nav-item">
+                            <a class="nav-link link-config" asp-controller="Countries" asp-action="Index">Countries</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link link-config" asp-controller="Categories" asp-action="Index">Categories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link link-config" asp-controller="Languages" asp-action="Index">Languages</a>
+                        </li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link link-config fw-bold" asp-controller="NewsSources" asp-action="Index">News Sources</a>
+                        </li>
 
-	<footer class="border-top footer text-muted">
-		<div class="container">
-			&copy; @DateTime.Today.Year - Ljupce Angelovski @* <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
-		</div>
-	</footer>
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="~/js/site.js" asp-append-version="true"></script>
-	@await RenderSectionAsync("Scripts", required: false)
+                        <div class="vr mx-2 d-none d-lg-block text-black-50" style="height: 20px; align-self: center;"></div>
+
+                        <li class="nav-item">
+                            <a class="nav-link link-main fw-bold" asp-controller="NewsArticles" asp-action="Index">Articles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link link-main fw-bold" asp-controller="BookmarkedArticles" asp-action="Index">Bookmarks</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link link-main fw-bold" asp-controller="BookmarkFolders" asp-action="Index">Folders</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center">
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer">
+        <div class="container d-flex justify-content-center align-items-center">
+            <span>&copy; @DateTime.Today.Year - <a href="@Environment.GetEnvironmentVariable("FOOTER_AUTHOR_URL")" target="_blank">@Environment.GetEnvironmentVariable("FOOTER_AUTHOR_NAME")</a></span>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

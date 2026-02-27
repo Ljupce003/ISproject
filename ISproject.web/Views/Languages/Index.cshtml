@@ -1,48 +1,57 @@
 ﻿@model IEnumerable<ISproject.Domain.Models.Language>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Languages";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index - Languages</h1>
+<div class="container py-4">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h1 class="fw-bold text-primary mb-0"><i class="bi bi-translate me-2"></i>Languages</h1>
+            <p class="text-muted">Manage available languages for news filtering</p>
+        </div>
+        @if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">
+                <i class="bi bi-plus-lg"></i> Add Language
+            </a>
+        }
+    </div>
 
-<p>
-    @if (User.Identity?.IsAuthenticated ?? false)
-    {
-        <a class="btn btn-success" asp-action="Create">Create New</a>
-    }
-</p>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Code)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Code)
-            </td>
-				<td>
-					@if (User.Identity?.IsAuthenticated ?? false)
-					{
-						<a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-						<a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id">Details</a>
-						<a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-					}
-				</td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">@Html.DisplayNameFor(model => model.Name)</th>
+                        <th>@Html.DisplayNameFor(model => model.Code)</th>
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <th class="text-end pe-4">Actions</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-bold text-dark">@item.Name</td>
+                            <td><span class="badge bg-secondary-subtle text-secondary px-3">@item.Code</span></td>
+                            @if (User.Identity?.IsAuthenticated ?? false)
+                            {
+                                <td class="text-end pe-4">
+                                    <div class="d-flex justify-content-end gap-1">
+                                        <a class="btn btn-warning btn-sm shadow-sm" style="width:32px" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i></a>
+                                        <a class="btn btn-info btn-sm shadow-sm text-white" style="width:32px" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-info-circle"></i></a>
+                                        <a class="btn btn-danger btn-sm shadow-sm" style="width:32px" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

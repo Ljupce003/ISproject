@@ -51,9 +51,9 @@ namespace ISproject.web.Controllers
         // GET: NewsSources/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(categoryService.GetAll(), "Id", "Code");
-            ViewData["CountryId"] = new SelectList(countryService.GetAll(), "Id", "Code");
-            ViewData["LanguageId"] = new SelectList(languageService.GetAll(), "Id", "Code");
+            ViewData["CategoryId"] = new SelectList(categoryService.GetAll(), "Id", "Description");
+            ViewData["CountryId"] = new SelectList(countryService.GetAll(), "Id", "Name");
+            ViewData["LanguageId"] = new SelectList(languageService.GetAll(), "Id", "Name");
             return View();
         }
 
@@ -69,9 +69,9 @@ namespace ISproject.web.Controllers
                 newsSourceService.Add(newsSource);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(categoryService.GetAll(), "Id", "Code");
-            ViewData["CountryId"] = new SelectList(countryService.GetAll(), "Id", "Code");
-            ViewData["LanguageId"] = new SelectList(languageService.GetAll(), "Id", "Code");
+            ViewData["CategoryId"] = new SelectList(categoryService.GetAll(), "Id", "Description");
+            ViewData["CountryId"] = new SelectList(countryService.GetAll(), "Id", "Name");
+            ViewData["LanguageId"] = new SelectList(languageService.GetAll(), "Id", "Name");
             return View(newsSource);
         }
 
@@ -88,9 +88,9 @@ namespace ISproject.web.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(categoryService.GetAll(), "Id", "Code");
-            ViewData["CountryId"] = new SelectList(countryService.GetAll(), "Id", "Code");
-            ViewData["LanguageId"] = new SelectList(languageService.GetAll(), "Id", "Code");
+            ViewData["CategoryId"] = new SelectList(categoryService.GetAll(), "Id", "Description");
+            ViewData["CountryId"] = new SelectList(countryService.GetAll(), "Id", "Name");
+            ViewData["LanguageId"] = new SelectList(languageService.GetAll(), "Id", "Name");
             return View(newsSource);
         }
 
@@ -111,9 +111,9 @@ namespace ISproject.web.Controllers
                 newsSourceService.Update(newsSource);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(categoryService.GetAll(), "Id", "Code");
-            ViewData["CountryId"] = new SelectList(countryService.GetAll(), "Id", "Code");
-            ViewData["LanguageId"] = new SelectList(languageService.GetAll(), "Id", "Code");
+            ViewData["CategoryId"] = new SelectList(categoryService.GetAll(), "Id", "Description");
+            ViewData["CountryId"] = new SelectList(countryService.GetAll(), "Id", "Name");
+            ViewData["LanguageId"] = new SelectList(languageService.GetAll(), "Id", "Name");
             return View(newsSource);
         }
 

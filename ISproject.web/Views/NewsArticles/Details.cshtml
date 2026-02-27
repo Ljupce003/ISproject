@@ -1,79 +1,71 @@
 ﻿@model ISproject.Domain.Models.NewsArticle
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Article Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
+                    <i class="bi bi-arrow-left"></i> Back to News
+                </a>
+                <div class="d-flex gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning rounded-pill px-4 shadow-sm text-white">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </a>
+                </div>
+            </div>
 
-<div>
-    <h4>NewsArticle</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Author)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Url)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Url)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Source)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Source)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageUrl)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Language)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Language.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Country.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PublishedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PublishedAt)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-info">Back to List</a>
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" class="card-img-top" style="max-height: 450px; object-fit: cover;" alt="Article Image">
+                }
+
+                <div class="card-body p-5">
+                    <div class="mb-3 d-flex gap-2">
+                        <span class="badge bg-primary px-3 py-2">@Model.Category?.Code</span>
+                        <span class="badge bg-dark px-3 py-2">@Model.Source</span>
+                    </div>
+
+                    <h1 class="display-5 fw-bold text-dark mb-3">@Model.Title</h1>
+
+                    <div class="d-flex align-items-center mb-4 text-muted">
+                        <div class="me-4">
+                            <i class="bi bi-person-circle me-1"></i> <strong>By @(Model.Author ?? "Unknown")</strong>
+                        </div>
+                        <div>
+                            <i class="bi bi-calendar3 me-1"></i> @Model.PublishedAt?.ToString("MMMM dd, yyyy - HH:mm")
+                        </div>
+                    </div>
+
+                    <hr class="my-4 opacity-10">
+
+                    <div class="article-body fs-5 text-secondary leading-relaxed mb-5" style="line-height: 1.8;">
+                        @Model.Description
+                    </div>
+
+                    <div class="row bg-light rounded-4 p-4 g-3">
+                        <div class="col-md-4">
+                            <label class="small text-muted text-uppercase fw-bold d-block">Country</label>
+                            <span class="fs-6"><i class="bi bi-geo-alt-fill text-danger"></i> @Model.Country?.Name</span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="small text-muted text-uppercase fw-bold d-block">Language</label>
+                            <span class="fs-6"><i class="bi bi-translate text-info"></i> @Model.Language?.Name</span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="small text-muted text-uppercase fw-bold d-block">Original Link</label>
+                            <a href="@Model.Url" target="_blank" class="text-primary text-decoration-none fw-bold">
+                                Visit Website <i class="bi bi-box-arrow-up-right small"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

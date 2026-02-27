@@ -37,7 +37,7 @@ namespace ISproject.Service.Implementation
 
         public BookmarkedArticle Delete(Guid id)
         {
-            var article= GetById(id);
+            var article = GetById(id);
             if (article == null)
             {
                 throw new ArgumentException("BookmarkedArticle not found", nameof(id));
@@ -67,22 +67,22 @@ namespace ISproject.Service.Implementation
             }
 
             var cart = bookmarkCartService.GetByUserId(userId);
-            
+
 
             return repository.GetAll(
                     selector: a => a,
-                    predicate: p => p.BookmarkCart == cart, 
+                    predicate: p => p.BookmarkCart == cart,
                     include: ai => ai
                      .Include(aa => aa.Article!)
                      .Include(ab => ab.BookmarkCart!));
-            
 
-                
+
+
         }
 
         public BookmarkedArticle? GetById(Guid Id)
         {
-            return repository.Get(selector: a => a, include: ai => ai
+            return repository.Get(selector: a => a, predicate: p => p.Id == Id, include: ai => ai
             .Include(aa => aa.Article!)
             .Include(ab => ab.BookmarkCart!));
         }

@@ -1,42 +1,61 @@
 ﻿@model ISproject.Domain.Models.BookmarkedArticle
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "New Bookmark";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header bg-success py-3 px-4 border-0">
+                    <h4 class="mb-0 text-white fw-bold"><i class="bi bi-bookmark-plus me-2"></i>Add to Bookmarks</h4>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
 
-<h4>BookmarkedArticle</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ArticleId" class="control-label">Article Title</label>
-                <select asp-for="ArticleId" class ="form-control" asp-items="ViewBag.ArticleId"></select>
+                        <div class="mb-3">
+                            <label asp-for="ArticleId" class="form-label fw-bold text-secondary">Select Article</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-newspaper"></i></span>
+                                <select asp-for="ArticleId" class="form-select border-start-0" asp-items="ViewBag.ArticleId"></select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="BookmarkCartId" class="form-label fw-bold text-secondary">Bookmark Collection</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-person-badge"></i></span>
+                                <input asp-for="BookmarkCartId" class="form-control bg-light border-start-0" value="@ViewBag.BookmarkCartId" readonly />
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="AddedAt" class="form-label fw-bold text-secondary">Timestamp</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-clock"></i></span>
+                                <input asp-for="AddedAt" class="form-control border-start-0" />
+                            </div>
+                            <span asp-validation-for="AddedAt" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex gap-2 pt-2">
+                            <button type="submit" class="btn btn-success px-4 rounded-pill fw-bold shadow-sm">
+                                Create Bookmark
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4 rounded-pill">Cancel</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="BookmarkCartId" class="control-label">BookmarkCart Id</label>
-                <input asp-for="BookmarkCartId" class="form-control" value="@ViewBag.BookmarkCartId" readonly />
-            </div>
-            <div class="form-group">
-                <label asp-for="AddedAt" class="control-label">Added At</label>
-                <input asp-for="AddedAt" class="form-control" />
-                <span asp-validation-for="AddedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-1">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div class="mt-1">
-    <a asp-action="Index" class="btn btn-info">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

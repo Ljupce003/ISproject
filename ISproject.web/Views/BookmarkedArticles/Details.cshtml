@@ -1,37 +1,73 @@
 ﻿@model ISproject.Domain.Models.BookmarkedArticle
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Bookmark Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="mb-4">
+                <a asp-action="Index" class="btn btn-link text-decoration-none p-0 text-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Back to My Bookmarks
+                </a>
+            </div>
 
-<div>
-    <h4>BookmarkedArticle</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Article)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Article.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BookmarkCart)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BookmarkCart.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AddedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AddedAt)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-info">Back to List</a>
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="row g-0">
+                    <div class="col-md-4 bg-light border-end p-4">
+                        <div class="text-center mb-4">
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="bi bi-bookmark-check-fill text-primary fs-3"></i>
+                            </div>
+                            <h5 class="fw-bold">Bookmark Info</h5>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="small text-muted text-uppercase fw-bold d-block">Saved On</label>
+                            <span class="text-dark">@Model.AddedAt?.ToString("MMMM dd, yyyy")</span>
+                            <div class="small text-muted">at @Model.AddedAt?.ToString("HH:mm")</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="small text-muted text-uppercase fw-bold d-block">Collection ID</label>
+                            <code class="text-primary small">@Model.BookmarkCart?.Id</code>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="d-grid gap-2">
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning rounded-pill fw-bold">
+                                <i class="bi bi-pencil-square me-1"></i> Edit Details
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8 p-4 p-md-5">
+                        <label class="badge bg-info-subtle text-info mb-2 px-3 py-2 rounded-pill">Article Preview</label>
+                        <h2 class="fw-bold text-dark mb-3">@Model.Article?.Title</h2>
+
+                        <p class="text-muted fs-5 mb-4">
+                            @(Model.Article?.Description?? "No description available for this article.")
+                        </p>
+
+                        <div class="d-flex align-items-center p-3 bg-light rounded-3 mb-4">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-person-circle fs-2 text-secondary"></i>
+                            </div>
+                            <div class="ms-3">
+                                <p class="mb-0 fw-bold text-dark">@Model.Article?.Author</p>
+                                <p class="mb-0 small text-muted">Article Author</p>
+                            </div>
+                        </div>
+
+                        <a href="@Model.Article?.Url" target="_blank" class="btn btn-primary btn-lg rounded-pill px-5 shadow">
+                            Read Full Article <i class="bi bi-box-arrow-up-right ms-2 small"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,55 +1,83 @@
 ﻿@model ISproject.Domain.Models.NewsSource
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Source Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Sources
+                </a>
+                <div class="d-flex gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning rounded-pill px-4 shadow-sm text-white">
+                        <i class="bi bi-pencil-square me-1"></i> Edit Source
+                    </a>
+                </div>
+            </div>
 
-<div>
-    <h4>NewsSource</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Code)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Code)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Url)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Url)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Country.Code)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Language)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Language.Code)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-info">Back to List</a>
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header bg-info py-5 px-4 text-center border-0">
+                    <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3 shadow" style="width: 80px; height: 80px;">
+                        <i class="bi bi-broadcast text-info fs-1"></i>
+                    </div>
+                    <h2 class="text-white fw-bold mb-1">@Model.Name</h2>
+                    <span class="badge bg-white text-info rounded-pill px-3 py-2 fw-bold shadow-sm">
+                        CODE: @Model.Code
+                    </span>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+                    <div class="row g-4">
+                        <div class="col-md-7 border-end">
+                            <h5 class="fw-bold mb-4 text-secondary">Information Overview</h5>
+
+                            <div class="mb-4">
+                                <label class="small text-muted text-uppercase d-block fw-bold">Official Website</label>
+                                <a href="@Model.Url" target="_blank" class="fs-5 text-primary text-decoration-none fw-bold">
+                                    @Model.Url <i class="bi bi-box-arrow-up-right small"></i>
+                                </a>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="small text-muted text-uppercase d-block fw-bold">Category</label>
+                                <span class="fs-5 fw-semibold text-dark">
+                                    <i class="bi bi-collection me-2 text-info"></i>@Model.Category?.Description
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 ps-md-4">
+                            <h5 class="fw-bold mb-4 text-secondary">Location & Language</h5>
+
+                            <div class="p-3 bg-light rounded-4 mb-3">
+                                <label class="small text-muted text-uppercase d-block fw-bold mb-1">Country</label>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-geo-alt-fill text-danger fs-4 me-2"></i>
+                                    <span class="fw-bold fs-5">@Model.Country?.Name</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-light rounded-4">
+                                <label class="small text-muted text-uppercase d-block fw-bold mb-1">Language</label>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-translate text-primary fs-4 me-2"></i>
+                                    <span class="fw-bold fs-5">@Model.Language?.Name</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 text-center pt-4 border-top">
+                        <p class="text-muted small">
+                            Source Internal ID: <span class="badge bg-secondary-subtle text-secondary">@Model.Id</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -10,6 +10,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using DotNetEnv;
+
+// Load .env file
+var envPath = Path.Combine(Directory.GetCurrentDirectory(), "..", ".env");
+Env.Load(envPath);
+
 
 var builder = WebApplication.CreateBuilder(args);
 

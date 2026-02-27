@@ -1,56 +1,90 @@
 ﻿@model ISproject.Domain.Models.NewsSource
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Add Source";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header bg-success py-4 px-4 border-0">
+                    <div class="d-flex align-items-center text-white">
+                        <div class="bg-white rounded-circle p-2 me-3 shadow-sm">
+                            <i class="bi bi-plus-circle-fill text-success fs-4"></i>
+                        </div>
+                        <h3 class="mb-0 fw-bold">Register News Source</h3>
+                    </div>
+                </div>
 
-<h4>NewsSource</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Code" class="control-label"></label>
-                <input asp-for="Code" class="form-control" />
-                <span asp-validation-for="Code" class="text-danger"></span>
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4"></div>
+
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <label asp-for="Code" class="form-label fw-bold text-secondary">Unique Code</label>
+                                <input asp-for="Code" class="form-control shadow-sm" placeholder="e.g., bbc-news" />
+                                <span asp-validation-for="Code" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-8">
+                                <label asp-for="Name" class="form-label fw-bold text-secondary">Source Name</label>
+                                <input asp-for="Name" class="form-control shadow-sm" placeholder="e.g., BBC News" />
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Url" class="form-label fw-bold text-secondary">Website URL</label>
+                                <div class="input-group shadow-sm">
+                                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-link-45deg"></i></span>
+                                    <input asp-for="Url" class="form-control border-start-0" placeholder="https://www.example.com" />
+                                </div>
+                                <span asp-validation-for="Url" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="CategoryId" class="form-label fw-bold text-secondary">Category</label>
+                                <select asp-for="CategoryId" class="form-select shadow-sm" asp-items="ViewBag.CategoryId">
+                                    <option value="">-- Select --</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="CountryId" class="form-label fw-bold text-secondary">Country</label>
+                                <select asp-for="CountryId" class="form-select shadow-sm" asp-items="ViewBag.CountryId">
+                                    <option value="">-- Select --</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="LanguageId" class="form-label fw-bold text-secondary">Language</label>
+                                <select asp-for="LanguageId" class="form-select shadow-sm" asp-items="ViewBag.LanguageId">
+                                    <option value="">-- Select --</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 mt-4 pt-4 border-top">
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-success px-5 rounded-pill fw-bold shadow-sm">
+                                        <i class="bi bi-check-lg me-1"></i> Create Source
+                                    </button>
+                                    <a asp-action="Index" class="btn btn-outline-secondary px-5 rounded-pill">
+                                        Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Url" class="control-label"></label>
-                <input asp-for="Url" class="form-control" />
-                <span asp-validation-for="Url" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="CountryId" class="control-label"></label>
-                <select asp-for="CountryId" class ="form-control" asp-items="ViewBag.CountryId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="LanguageId" class="control-label"></label>
-                <select asp-for="LanguageId" class ="form-control" asp-items="ViewBag.LanguageId"></select>
-            </div>
-            <div class="form-group mt-1">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div class="mt-1">
-    <a asp-action="Index" class="btn btn-info">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -1,40 +1,40 @@
 ﻿@model ISproject.Domain.Models.BookmarkedArticle
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Remove Bookmark";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Delete</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-body p-5 text-center">
+                    <div class="text-danger mb-4">
+                        <i class="bi bi-bookmark-dash-fill" style="font-size: 4rem;"></i>
+                    </div>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>BookmarkedArticle</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Article)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Article.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BookmarkCart)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BookmarkCart.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AddedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AddedAt)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> 
-        <a asp-action="Index" class="btn btn-info">Back to List</a>
-    </form>
+                    <h3 class="fw-bold text-dark mb-3">Remove this bookmark?</h3>
+                    <p class="text-muted mb-4">You are about to remove the following article from your collection:</p>
+
+                    <div class="bg-light p-3 rounded-3 mb-4 border-start border-danger border-4 text-start">
+                        <h6 class="fw-bold mb-1 text-dark">@Model.Article?.Title</h6>
+                        <small class="text-muted"><i class="bi bi-calendar-check me-1"></i>Saved on @Model.AddedAt?.ToString("f")</small>
+                    </div>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger btn-lg rounded-pill fw-bold shadow-sm">
+                                <i class="bi bi-trash me-1"></i> Yes, Remove it
+                            </button>
+                            <a asp-action="Index" class="btn btn-link text-secondary text-decoration-none mt-2">
+                                Nevermind, go back
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

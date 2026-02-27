@@ -1,121 +1,142 @@
 ﻿@model IEnumerable<ISproject.Domain.Models.NewsSource>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "News Sources";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index - News Sources</h1>
-
-<p>
-	@if (User.Identity?.IsAuthenticated ?? false)
-	{
-		<a asp-action="Create" class="btn-success btn">Create New</a>
-	}
-</p>
-
-@* <div class="d-flex align-items-center">
-	<button type="button" class="btn btn-primary m-3 ms-0" id="fetchBtn">Fetch Sources</button>
-
-    <div id="sourceForm" class="hidden-form m-3">
-        <form method="get" class="d-flex align-items-center" asp-controller="News" asp-action="FetchSources">
-			<input type="text" name="sourceName" class="me-2" placeholder="Enter keyword..." />
-			<button type="submit" class="btn-sm btn btn-success">Fetch</button>
-		</form>
-	</div>
-</div> *@
-
-@if (User.Identity?.IsAuthenticated ?? false)
-{
-    <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#sourceForm">
-        Fetch Sources
-    </button>
-
-    <div class="collapse mt-3" id="sourceForm">
-        <div class="card card-body">
-            <form method="get" asp-controller="Api" asp-action="GetNewsSources">
-                <input type="text" name="sourceKeyword" class="form-control mb-2" placeholder="Enter keyword..." />
-                <button type="submit" class="btn btn-success">Fetch</button>
-            </form>
-        </div>
-    </div>
-}
-
-
-<table class="table mt-1 table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Code)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Url)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Country)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Language)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a href="@item.Url">Link</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Language.Name)
-            </td>
-            <td>
-				@if (User.Identity?.IsAuthenticated ?? false)
-				{
-					<a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-					<a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id">Details</a>
-					<a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-				}
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-
-
-@* <style>
-    .hidden-form {
-        max-height: 0;
-        opacity: 0;
-        overflow: hidden;
-        transition: all 0.4s ease; /* smooth transition */
+<style>
+    .source-table thead {
+        background-color: #f8f9fa;
+        border-top: 2px solid #0d6efd;
     }
-    .hidden-form.show {
-        max-height: 200px; /* big enough to fit form */
-        opacity: 1;
+
+    .btn-action {
+        width: 35px;
+        height: 35px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: transform 0.2s;
+        border: none;
+        color: white !important;
+    }
+
+        .btn-action:hover {
+            transform: scale(1.1);
+        }
+
+    .fetch-card {
+        border-radius: 15px;
+        border: none;
+        background-color: #f0f7ff;
     }
 </style>
 
-<script>
-    document.getElementById("fetchBtn").addEventListener("click", function () {
-        document.getElementById("sourceForm").classList.toggle("show");
-    });
-</script> *@
+<div class="container py-4">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h1 class="fw-bold text-primary mb-0">📡 News Sources</h1>
+            <p class="text-muted">Manage and discover verified news outlets</p>
+        </div>
+        @if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <div class="d-flex gap-2">
+                <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">
+                    <i class="bi bi-plus-lg"></i> Create New
+                </a>
+                <button class="btn btn-outline-primary rounded-pill px-4 shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#sourceForm">
+                    <i class="bi bi-cloud-download"></i> Fetch Sources
+                </button>
+            </div>
+        }
+    </div>
+
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <div class="collapse mb-4" id="sourceForm">
+            <div class="card fetch-card shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-search me-2"></i>API Import</h5>
+                    <form method="get" asp-controller="Api" asp-action="GetNewsSources" class="row g-2">
+                        <div class="col-md-9">
+                            <input type="text" name="sourceKeyword" class="form-control border-0 shadow-sm py-2" placeholder="Search for sources by keyword (e.g. 'Technology', 'BBC')..." />
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 shadow-sm">
+                                <i class="bi bi-arrow-repeat me-1"></i> Fetch from API
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 source-table">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">@Html.DisplayNameFor(model => model.Code)</th>
+                        <th>@Html.DisplayNameFor(model => model.Name)</th>
+                        <th>Category</th>
+                        <th>Region</th>
+                        <th>Language</th>
+                        <th class="text-center">Website</th>
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <th class="text-end pe-4">Actions</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4"><code class="fw-bold text-primary">@item.Code</code></td>
+                            <td class="fw-bold text-dark">@item.Name</td>
+                            <td>
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2">
+                                    @item.Category?.Code
+                                </span>
+                            </td>
+                            <td>
+                                <small class="fw-bold"><i class="bi bi-geo-alt text-danger"></i> @item.Country?.Name</small>
+                            </td>
+                            <td>
+                                <small class="text-muted">@item.Language?.Name</small>
+                            </td>
+                            <td class="text-center">
+                                <a href="@item.Url" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill">
+                                    <i class="bi bi-box-arrow-up-right"></i>
+                                </a>
+                            </td>
+                            @if (User.Identity?.IsAuthenticated ?? false)
+                            {
+                                <td class="text-end pe-4">
+                                    <div class="d-flex justify-content-end gap-1">
+                                        <a class="btn btn-warning btn-action shadow-sm" asp-action="Edit" asp-route-id="@item.Id" title="Edit">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <a class="btn btn-info btn-action shadow-sm" asp-action="Details" asp-route-id="@item.Id" title="Details">
+                                            <i class="bi bi-info-circle-fill"></i>
+                                        </a>
+                                        <a class="btn btn-danger btn-action shadow-sm" asp-action="Delete" asp-route-id="@item.Id" title="Delete">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-3 text-end text-muted small">
+        Showing @Model.Count() news sources
+    </div>
+</div>

@@ -97,3 +97,7 @@ nunit-*.xml
 Thumbs.db
 ehthumbs.db
 desktop.ini
+
+*.db
+/ISproject.Repository/Data/Migrations/20260227001331_SqliteSetupNew.cs
+/ISproject.Repository/Data/Migrations/20260227001331_SqliteSetupNew.Designer.cs
