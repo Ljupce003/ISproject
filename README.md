@@ -6,6 +6,13 @@ Users can browse articles from multiple sources, bookmark interesting content, o
 
 The project demonstrates a clean **Onion Architecture**, separation of concerns, API integration, and cloud deployment using Microsoft Azure.
 
+### Hosting
+
+This web app is hosted on Azure on the following link:
+- https://isprojectweb20250823163857-b3btc6aeawbehfb2.switzerlandnorth-01.azurewebsites.net
+
+**Note**: The application uses a **serverless database**. On the first request (or after a period of inactivity), the database may require a cold start, which can take approximately 45 seconds. During this time, initial data access (e.g., loading records from the database) may be delayed.
+
 ---
 
 ## Features
