@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Json;
-using DotNetEnv;
+using Microsoft.Extensions.Configuration;
 using ISproject.Domain.Models;
 using ISproject.Domain.Models.Responses;
 using ISproject.Service.Interface;
@@ -21,18 +21,17 @@ namespace ISproject.Service.Implementation
             ICountryService countryService,
             ICategoryService categoryService,
             INewsSourceService newsSourceService,
-            ILanguageService languageService)
+            ILanguageService languageService,
+            IConfiguration configuration)
         {
             this.countryService = countryService;
             this.categoryService = categoryService;
             this.newsSourceService = newsSourceService;
             this.languageService = languageService;
 
-            //Console.WriteLine($"Current dir: {Directory.GetCurrentDirectory()}");
-            var envPath = Path.Combine(Directory.GetCurrentDirectory(), "..", ".env");
-            Env.Load(envPath);
-            Console.WriteLine($"Env dir: {envPath}");
-            ApiKey = Environment.GetEnvironmentVariable("API_KEY") ?? throw new Exception("API_KEY not found");
+            ApiKey = !string.IsNullOrWhiteSpace(configuration["API_KEY"])
+                ? configuration["API_KEY"]
+                : throw new InvalidOperationException("API_KEY not found");
 
             this.client = new HttpClient();
         }
@@ -97,15 +96,9 @@ namespace ISproject.Service.Implementation
                             Source = dto.Source,
                             Country = dto.Country != null ? countryService.GetByCode(dto.Country) : null,
                             Category = dto.Category != null ? categoryService.GetByCode(dto.Category) : null,
-                            PublishedAt = dto.Published_at,
+                            PublishedAt = dto.Published_at?.UtcDateTime,
                             ImageUrl = dto.ImageUrl
                         };
-
-                        if (article.Language == null) Console.WriteLine($"Language - {dto.Language} -|- Length - {dto.Language.Length}");
-                        if (article.Country == null) Console.WriteLine($"Country - {dto.Country} -|- Length - {dto.Country.Length}");
-                        if (article.Category == null) Console.WriteLine($"Category - {dto.Category} -|- Length - {dto.Category.Length}");
-
-                        //if (article.Language == null || article.Country == null || article.Category == null) continue;
 
                         newsArticles.Add(article);
 

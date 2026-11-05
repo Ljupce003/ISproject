@@ -138,7 +138,7 @@ namespace ISproject.Service.Implementation
                                                 {
                                                     Article = article,
                                                     BookmarkCart = cart,
-                                                    AddedAt = DateTime.Now
+                                                    AddedAt = DateTime.UtcNow
                                                 });
 
                     }

@@ -1,0 +1,86 @@
+# Add exactly one of docker-compose.native.yml or docker-compose.proxy.yml.
+# ./compose-prod.sh defaults to the host-installed Nginx overlay.
+name: isproject-production
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-database: &database
+  DOTNET_ENVIRONMENT: Production
+  ASPNETCORE_ENVIRONMENT: Production
+  Database__Host: postgres
+  Database__Port: "5432"
+  Database__Name: ${DB_DATABASE:?Set DB_DATABASE in .env.production}
+  Database__Username: ${DB_USERNAME:?Set DB_USERNAME in .env.production}
+  Database__Password: ${DB_PASSWORD:?Set DB_PASSWORD in .env.production}
+
+services:
+  postgres:
+    image: postgres:17-bookworm
+    restart: unless-stopped
+    stop_grace_period: 60s
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:?Set DB_DATABASE in .env.production}
+      POSTGRES_USER: ${DB_USERNAME:?Set DB_USERNAME in .env.production}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env.production}
+    ports:
+      - "127.0.0.1:${ISPROJECT_DB_PORT:-8003}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    logging: *logging
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+
+  # Run explicitly before starting/updating web. The web process never migrates the DB.
+  migrate:
+    image: ${MIGRATION_IMAGE:?Set MIGRATION_IMAGE in .env.production}
+    profiles: [tools]
+    restart: "no"
+    init: true
+    environment: *database
+    logging: *logging
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    image: ${APP_IMAGE:?Set APP_IMAGE in .env.production}
+    restart: unless-stopped
+    init: true
+    stop_grace_period: 30s
+    environment:
+      <<: *database
+      ASPNETCORE_URLS: http://+:8001
+      AllowedHosts: "${APP_HOST:?Set APP_HOST to the public domain in .env.production};localhost;127.0.0.1"
+      TRUSTED_PROXY_CIDRS: ${TRUSTED_PROXY_CIDRS:?Set the trusted Nginx IPs/CIDRs in .env.production}
+      DataProtection__KeysPath: /var/lib/isproject/keys
+      API_KEY: ${API_KEY:?Set API_KEY in .env.production}
+    volumes:
+      - data_protection_keys:/var/lib/isproject/keys
+    logging: *logging
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "--show-error", "http://127.0.0.1:8001/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  postgres_data:
+  data_protection_keys:
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: ${APP_NETWORK_SUBNET:-172.30.81.0/24}

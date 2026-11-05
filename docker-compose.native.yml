@@ -1,0 +1,5 @@
+# Host-installed Nginx uses http://127.0.0.1:8001.
+services:
+  web:
+    ports:
+      - "127.0.0.1:${ISPROJECT_HTTP_PORT:-8001}:8001"

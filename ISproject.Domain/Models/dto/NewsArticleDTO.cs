@@ -11,6 +11,6 @@
         public string? Category { get; set; }
         public string? Language { get; set; }
         public string? Country { get; set; }
-        public DateTime? Published_at { get; set; }
+        public DateTimeOffset? Published_at { get; set; }
     }
 }

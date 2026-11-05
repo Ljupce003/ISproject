@@ -1,0 +1,12 @@
+# Containerized Nginx uses http://isproject-web:8001 on web-proxy.
+services:
+  web:
+    networks:
+      default: {}
+      web-proxy:
+        aliases: [isproject-web]
+
+networks:
+  web-proxy:
+    external: true
+    name: web-proxy

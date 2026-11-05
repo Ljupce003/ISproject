@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.5.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.8" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.8" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.8" />
@@ -17,6 +17,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ISproject.Domain\ISproject.Domain.csproj" />
+  </ItemGroup>
+
+  <!-- Historical SQL Server migrations are retained for reference only. -->
+  <ItemGroup>
+    <Compile Remove="Data/Migrations/SqlServer/**/*.cs" />
   </ItemGroup>
 
 </Project>

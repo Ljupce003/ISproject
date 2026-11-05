@@ -1,103 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ISproject.Repository;
-using ISproject.Repository.Data;
+﻿using ISproject.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Data.SqlClient;
-using Azure.Identity;
-using Azure.Core;
 
-namespace ISproject.Repository
+namespace ISproject.Repository;
+
+public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
 {
-    public class ApplicationDBContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+    public ApplicationDbContext CreateDbContext(string[] args)
     {
-        public ApplicationDbContext CreateDbContext(string[] args)
+        var environment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
+            ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+            ?? "Production";
+
+        // Support commands from the solution, web, repository, or published directory.
+        var currentDirectory = Directory.GetCurrentDirectory();
+        var candidates = new[]
         {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json")
-                .Build();
+            currentDirectory,
+            Path.Combine(currentDirectory, "ISproject.web"),
+            Path.GetFullPath(Path.Combine(currentDirectory, "..", "ISproject.web")),
+            AppContext.BaseDirectory
+        };
+        var configurationDirectory = candidates.FirstOrDefault(directory =>
+            File.Exists(Path.Combine(directory, "appsettings.json"))) ?? currentDirectory;
 
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(configurationDirectory)
+            .AddJsonFile("appsettings.json", optional: true)
+            .AddJsonFile($"appsettings.{environment}.json", optional: true)
+            .AddEnvironmentVariables()
+            .Build();
 
-            return new ApplicationDbContext(optionsBuilder.Options);
-        }
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>();
+        ApplicationDbContextConfiguration.ConfigurePostgreSql(
+            options, ApplicationDbContextConfiguration.GetConnectionString(configuration));
+
+        return new ApplicationDbContext(options.Options);
     }
 }
-
-//namespace ISproject.Repository
-//{
-//    public class ApplicationDBContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
-//    {
-//        public ApplicationDbContext CreateDbContext(string[] args)
-//        {
-//            // Get connection string without authentication info
-//            var connectionString = "Server=tcp:isproject221563.database.windows.net,1433;Database=ISproject.web_db;Encrypt=True;TrustServerCertificate=False;";
-
-//            // Create SQL connection and set AccessToken for Azure AD authentication
-//            var sqlConnection = new SqlConnection(connectionString);
-//            var tokenCredential = new DefaultAzureCredential();
-//            sqlConnection.AccessToken = tokenCredential.GetToken(
-//                new TokenRequestContext(new[] { "https://database.windows.net/.default" })
-//            ).Token;
-
-//            // Configure DbContext options
-//            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-//            optionsBuilder.UseSqlServer(sqlConnection);
-
-//            return new ApplicationDbContext(optionsBuilder.Options);
-//        }
-//    }
-//}
-
-
-
-//namespace ISproject.Repository
-//{
-//    public class ApplicationDBContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
-//    {
-//        public ApplicationDbContext CreateDbContext(string[] args)
-//        {
-//            // Load configuration
-//            var configuration = new ConfigurationBuilder()
-//                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-//                .AddJsonFile("appsettings.json", optional: true)
-//                .AddEnvironmentVariables()
-//                .Build();
-
-//            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-
-//            // Try Azure connection string first
-//            var azureConnectionString = configuration["AZURE_SQL_CONNECTIONSTRING"];
-
-//            if (!string.IsNullOrEmpty(azureConnectionString))
-//            {
-//                var conn = new SqlConnection(azureConnectionString);
-
-//                // Acquire token for Entra login
-//                var tokenCredential = new DefaultAzureCredential();
-//                AccessToken token = tokenCredential.GetToken(
-//                    new TokenRequestContext(new[] { "https://database.windows.net/.default" })
-//                );
-
-//                conn.AccessToken = token.Token;
-//                optionsBuilder.UseSqlServer(conn);
-//            }
-//            else
-//            {
-//                // Fallback to local DB
-//                var localConnectionString = configuration.GetConnectionString("DefaultConnection");
-//                optionsBuilder.UseSqlServer(localConnectionString);
-//            }
-
-//            return new ApplicationDbContext(optionsBuilder.Options);
-//        }
-//    }
-//}
-

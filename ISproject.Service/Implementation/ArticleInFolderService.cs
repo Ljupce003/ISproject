@@ -73,7 +73,7 @@ namespace ISproject.Service.Implementation
                     BookmarkFolderId = folder.Id,
                     NewsArticle = bookmark.Article,
                     NewsArticleId = bookmark.ArticleId,
-                    DateAdded = DateTime.Now
+                    DateAdded = DateTime.UtcNow
                 });
 
                 bookmarkedArticlesService.Delete(bookmark.Id);

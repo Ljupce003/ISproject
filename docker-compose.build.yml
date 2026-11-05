@@ -1,0 +1,18 @@
+# Build and publish with --env-file .env.build. This file does not run services.
+name: isproject-build
+
+services:
+  web:
+    image: ${APP_IMAGE:?Set APP_IMAGE to your registry/image:version}
+    platform: ${BUILD_PLATFORM:-linux/amd64}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+  migrate:
+    image: ${MIGRATION_IMAGE:?Set MIGRATION_IMAGE to your registry/image:version}
+    platform: ${BUILD_PLATFORM:-linux/amd64}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrations

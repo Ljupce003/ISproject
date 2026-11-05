@@ -13,7 +13,7 @@
                     <i class="bi bi-arrow-left me-1"></i> Back to Sources
                 </a>
                 <div class="d-flex gap-2">
-                    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning rounded-pill px-4 shadow-sm text-white">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning rounded-pill px-4 shadow-sm text-white">
                         <i class="bi bi-pencil-square me-1"></i> Edit Source
                     </a>
                 </div>
@@ -24,7 +24,7 @@
                     <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3 shadow" style="width: 80px; height: 80px;">
                         <i class="bi bi-broadcast text-info fs-1"></i>
                     </div>
-                    <h2 class="text-white fw-bold mb-1">@Model.Name</h2>
+                    <h2 class="text-white fw-bold mb-1">@Model.Name?</h2>
                     <span class="badge bg-white text-info rounded-pill px-3 py-2 fw-bold shadow-sm">
                         CODE: @Model.Code
                     </span>

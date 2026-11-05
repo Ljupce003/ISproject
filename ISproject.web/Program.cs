@@ -1,4 +1,3 @@
-using Azure.Identity;
 using ISproject.Domain.Models;
 using ISproject.Repository.Data;
 using ISproject.Repository.Implementation;
@@ -6,75 +5,48 @@ using ISproject.Repository.Interface;
 using ISproject.Service.Implementation;
 using ISproject.Service.Interface;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using DotNetEnv;
-
-// Load .env file
-var envPath = Path.Combine(Directory.GetCurrentDirectory(), "..", ".env");
-Env.Load(envPath);
-
+using ISproject.web.Hosting;
+using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-//var azureConnectionString = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
-//var localConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//{
-//    if (!string.IsNullOrEmpty(azureConnectionString))
-//    {
-//        // Azure SQL with Entra login
-//        var conn = new SqlConnection(azureConnectionString);
-
-//        // Get token for Entra login
-//        var tokenCredential = new DefaultAzureCredential();
-//        conn.AccessToken = tokenCredential.GetToken(
-//            new Azure.Core.TokenRequestContext(
-//                new[] { "https://database.windows.net/.default" }
-//            )
-//        ).Token;
-
-//        options.UseSqlServer(conn);
-//    }
-//    else
-//    {
-//        // Local fallback
-//        options.UseSqlServer(localConnectionString);
-//    }
-//});
-
-//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseSqlServer(connectionString));
-
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-// Exception filter for easier debugging
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    //options.UseSqlServer(connectionString)
-    
-    options.UseSqlServer(connectionString, sqlOptions =>
+// Local convenience only; deployed containers receive configuration from Compose.
+if (builder.Environment.IsDevelopment())
+{
+    var envPath = Path.Combine(builder.Environment.ContentRootPath, "..", ".env");
+    if (File.Exists(envPath))
     {
-        sqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 5,                  // retry 5 times
-            maxRetryDelay: TimeSpan.FromSeconds(15),  // wait up to 15s between retries
-            errorNumbersToAdd: null
-        );
-    })
-    
-);
+        Env.NoClobber().Load(envPath);
+        builder.Configuration.AddEnvironmentVariables();
+    }
+}
+
+ReverseProxyConfiguration.Configure(builder.Services, builder.Configuration);
+var dataProtection = builder.Services.AddDataProtection().SetApplicationName("ISproject");
+var keysPath = builder.Configuration["DataProtection:KeysPath"];
+if (!string.IsNullOrWhiteSpace(keysPath))
+{
+    Directory.CreateDirectory(keysPath);
+    dataProtection.PersistKeysToFileSystem(new DirectoryInfo(keysPath));
+}
+
+// Runtime and EF tooling use the same PostgreSQL provider and migrations assembly.
+var connectionString = ApplicationDbContextConfiguration.GetConnectionString(builder.Configuration);
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    ApplicationDbContextConfiguration.ConfigurePostgreSql(options, connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddHealthChecks().AddCheck<PostgreSqlHealthCheck>("postgresql");
 
 builder.Services.AddDefaultIdentity<NewsUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+if (!builder.Environment.IsDevelopment())
+{
+    builder.Services.AddHttpsRedirection(options => options.HttpsPort = 443);
+    builder.Services.ConfigureApplicationCookie(options =>
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always);
+}
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -93,6 +65,7 @@ builder.Services.AddTransient<IApiService, ApiService>();
 
 
 var app = builder.Build();
+app.UseForwardedHeaders();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -106,10 +79,14 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// Docker checks the application directly over HTTP; public traffic uses Nginx HTTPS.
+app.UseWhen(context => !context.Request.Path.Equals("/health"),
+    branch => branch.UseHttpsRedirection());
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+app.MapHealthChecks("/health").AllowAnonymous();
 
 app.MapStaticAssets();
 

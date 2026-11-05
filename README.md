@@ -6,12 +6,12 @@ Users can browse articles from multiple sources, bookmark interesting content, o
 
 The project demonstrates a clean **Onion Architecture**, separation of concerns, API integration, and cloud deployment using Microsoft Azure.
 
-### Hosting
+### Original hosting
 
-This web app is hosted on Azure on the following link:
+The original Azure deployment was available at:
 - https://isprojectweb20250823163857-b3btc6aeawbehfb2.switzerlandnorth-01.azurewebsites.net
 
-**Note**: The application uses a **serverless database**. On the first request (or after a period of inactivity), the database may require a cold start, which can take approximately 45 seconds. During this time, initial data access (e.g., loading records from the database) may be delayed.
+The current application uses **PostgreSQL** for development and production. See [PostgreSQL setup and migrations](docs/database-postgresql.md). The original Azure SQL migration history is retained as an inactive archive.
 
 ---
 
@@ -44,8 +44,8 @@ This web app is hosted on Azure on the following link:
 
 * **Cloud deployment**
 
-  * Application hosted on **Azure App Service**
-  * Database hosted on **Azure SQL**
+  * Originally hosted on **Azure App Service** with **Azure SQL**
+  * Current database configuration targets **PostgreSQL**
 
 ---
 
@@ -120,7 +120,7 @@ Responsibilities:
 * **C#**
 * **Razor Views (CSHTML)**
 * **Entity Framework Core**
-* **SQL Server**
+* **PostgreSQL**
 * **External News APIs**
 * **Excel Export Libraries (ClosedXML / EPPlus)**
 * **Azure App Service**
@@ -130,27 +130,24 @@ Responsibilities:
 
 ## Database
 
-The application uses **SQL Server** to store:
+The application uses **PostgreSQL** to store:
 
 * Users
 * Bookmarked articles
 * Bookmark folders
 * Relationships between folders and articles
 
-The database is hosted on **Azure SQL Database** in production.
+Active EF Core migrations and their model snapshot are in `ISproject.Repository/Data/Migrations/PostgreSql`. Historical SQL Server migrations are in `Data/Migrations/SqlServer` and excluded from compilation.
+
+See [PostgreSQL setup and migrations](docs/database-postgresql.md) for connection configuration and database update commands.
 
 ---
 
 ## Deployment
 
-The project is deployed on **Microsoft Azure**.
+Production must provide PostgreSQL credentials through `ConnectionStrings__DefaultConnection` or the structured `Database__*` settings used by Docker Compose. The application does not apply migrations automatically at startup; apply the committed PostgreSQL migrations as a deployment step.
 
-Infrastructure includes:
-
-* **Azure App Service** – hosts the ASP.NET Core web application
-* **Azure SQL Database** – stores application data
-
-This setup allows the application to be accessed publicly while maintaining scalable cloud infrastructure.
+The new initial migration creates a fresh schema. Moving existing Azure SQL data into PostgreSQL requires a separate data transfer. See [Docker build, image publishing, and VM deployment](docs/docker-deployment.md) for the production Compose setup. The deployment uses separate published app and migration images, with native or Docker Nginx support.
 
 ---
 
